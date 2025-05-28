@@ -76,48 +76,57 @@ const PredictionScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {selectedImage ? (
-        <Image source={{ uri: selectedImage.uri }} style={styles.preview} />
-      ) : (
-        <View style={styles.placeholder}>
-          <Text style={styles.placeholderText}>Chưa có ảnh</Text>
+    <View style={styles.mainContainer}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {selectedImage ? (
+          <Image source={{ uri: selectedImage.uri }} style={styles.preview} />
+        ) : (
+          <View style={styles.placeholder}>
+            <Text style={styles.placeholderText}>Chưa có ảnh</Text>
+          </View>
+        )}
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={chooseImage} style={styles.button}>
+            <Text style={styles.buttonText}>📁 Chọn ảnh</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handlePredict}
+            style={[styles.button, { backgroundColor: '#28a745' }]}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? '⏳ Đang xử lý...' : '🧠 Dự đoán'}
+            </Text>
+          </TouchableOpacity>
         </View>
-      )}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={chooseImage} style={styles.button}>
-          <Text style={styles.buttonText}>📁 Chọn ảnh</Text>
-        </TouchableOpacity>
+        {loading && <ActivityIndicator size="large" color="#007bff" style={{ marginTop: 20 }} />}
 
-        <TouchableOpacity
-          onPress={handlePredict}
-          style={[styles.button, { backgroundColor: '#28a745' }]}
-          disabled={loading}
-        >
-          <Text style={styles.buttonText}>
-            {loading ? '⏳ Đang xử lý...' : '🧠 Dự đoán'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {loading && <ActivityIndicator size="large" color="#007bff" style={{ marginTop: 20 }} />}
-
-      {result && (
-        <View style={styles.resultBox}>
-          <Text style={styles.resultText}>📊 Kết quả:</Text>
-          <Text style={styles.resultText}>🦠 Bệnh: {result.class}</Text>
-          <Text style={styles.resultText}>🎯 Độ tin cậy: {(result.confidence * 100).toFixed(2)}%</Text>
-        </View>
-      )}
-    </ScrollView>
+        {result && (
+          <View style={styles.resultBox}>
+            <Text style={styles.resultText}>📊 Kết quả:</Text>
+            <Text style={styles.resultText}>🦠 Bệnh: {result.class}</Text>
+            <Text style={styles.resultText}>🎯 Độ tin cậy: {(result.confidence * 100).toFixed(2)}%</Text>
+          </View>
+        )}
+      </ScrollView>
+    </View>
   );
 };
 
 export default PredictionScreen;
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, backgroundColor: '#fff', padding: 16 },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  container: {
+    flexGrow: 1,
+    padding: 16,
+  },
   preview: {
     width: '100%',
     height: 400,
